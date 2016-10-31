@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageCommunicator.cs" />
     <Compile Include="Messages\AbstractMessage.cs" />
     <Compile Include="Messages\CloseConMsg.cs" />
     <Compile Include="Messages\DeleteTaskMsg.cs" />

@@ -9,14 +9,14 @@ namespace TaskServer
 {
     class Workerpool
     {
-        List<Thread> _connectionPool;
+        List<Thread> _workerPool;
         public Workerpool()
         {
-            _connectionPool = new List<Thread>();
+            _workerPool = new List<Thread>();
         }
         public int getWorkerCount()
         {
-            return _connectionPool.Count;
+            return _workerPool.Count;
         }
         public void closeAllConnections()
         {
