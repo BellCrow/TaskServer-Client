@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading;
 
 namespace TaskServer
 {
@@ -12,20 +13,37 @@ namespace TaskServer
     class Worker
     {
         static int IDPool = 0;
-        TcpClient _connection;
+        MessageCommunicator _comLink;
         int _connectionID;
-        Queue<AbstractMessage> _messageQueue;
-        public Worker(TcpClient connection)
+        Thread _workerThread;
+        bool _isWorking;
+        IServerTask _task;
+        public Worker(TcpClient connection,IServerTask task)
         {
-            _connection = connection;
-            _messageQueue = new Queue<AbstractMessage>();
+            _comLink = new MessageCommunicator(connection);
             _connectionID = ++IDPool;
+            _task = task;
+            _isWorking = false;
         }
-        public void startWork(Action<TcpClient> argFunction)
+        public void startWork()
         {
-            if (_connection.Connected == false)
-                throw new Exception("Connection not established");
-            argFunction(_connection);
+            _workerThread = new Thread(()=>_task.startTask(_comLink));
+            _workerThread.Start();
+            _isWorking = true;
+        }
+        public void requestStop()
+        {
+            _task.requestStop();
+        }
+        public void stopWorkingForce()
+        {
+            _workerThread.Abort();
+            _isWorking = false;
+            
+        }
+        public bool isWorking()
+        {
+            return _isWorking;
         }
     }
 }

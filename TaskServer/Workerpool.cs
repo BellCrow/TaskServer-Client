@@ -9,10 +9,10 @@ namespace TaskServer
 {
     class Workerpool
     {
-        List<Thread> _workerPool;
+        List<Worker> _workerPool;
         public Workerpool()
         {
-            _workerPool = new List<Thread>();
+            _workerPool = new List<Worker>();
         }
         public int getWorkerCount()
         {
@@ -20,7 +20,23 @@ namespace TaskServer
         }
         public void closeAllConnections()
         {
-
+            foreach(Worker elem in _workerPool)
+            {
+                elem.stopWorkingForce();
+            }
+        }
+        public bool addWorker(Worker workerArg)
+        {
+            try 
+            {
+                _workerPool.Add(workerArg);
+                workerArg.startWork();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }
