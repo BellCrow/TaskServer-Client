@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using Messages;
 
 namespace TaskServer
 {
-
     class Worker
     {
         static int IDPool = 0;
@@ -43,7 +43,9 @@ namespace TaskServer
         }
         public bool isWorking()
         {
-            return _isWorking;
+            if (_workerThread == null || !_workerThread.IsAlive)
+                return false;
+            return true;
         }
     }
 }

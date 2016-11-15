@@ -16,7 +16,13 @@ namespace TaskServer
         }
         public int getWorkerCount()
         {
-            return _workerPool.Count;
+            int counter = 0;
+            foreach(Worker elem in _workerPool)
+            {
+                if (elem.isWorking())
+                    counter++;
+            }
+            return counter;
         }
         public void closeAllConnections()
         {

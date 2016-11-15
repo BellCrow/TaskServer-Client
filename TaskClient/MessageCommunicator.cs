@@ -22,9 +22,10 @@ namespace TaskServer
         byte[] _inbuffer;
         public MessageCommunicator(TcpClient conArg)
         {
-            if(_connection.Connected)
-                throw new Exception("No connection established");
             _connection = conArg;
+            if(!_connection.Connected)
+                throw new Exception("No connection established");
+            
             _stream = conArg.GetStream();
             _formatter = new BinaryFormatter();
         }
