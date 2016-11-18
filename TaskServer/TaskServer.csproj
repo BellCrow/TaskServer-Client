@@ -52,6 +52,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="DBConnector.cs" />
     <Compile Include="EchoTask.cs" />
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="IServerTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
