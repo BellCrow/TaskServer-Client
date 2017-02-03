@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Threading;
 using Messages;
 
 
@@ -14,24 +15,24 @@ namespace TaskServer
     {
         static void Main(string[] args)
         {
-            const int servPort = 55000;
-            bool wasTwo = false;
+            Config conf = new Config();
+            conf.DbAddress = "127.0.0.1";
+            conf.DbDatabaseName = "taskdatabase";
+            conf.DbUserName = "taskuser";
+            string pw = ;
+            MessageCommunicator mec = new MessageCommunicator(50000);
 
-            PostTaskMsg p = new PostTaskMsg(DateTime.Today, "TestComment", 3, PostTaskMsg.repeatIntervall.DAY);
-            Workerpool bla = new Workerpool();
-            TcpListener servSocket = new TcpListener(servPort);
-            TcpClient tempClientCon;
-            Console.WriteLine("Server Created\nListening for clients");
-            servSocket.Start();
-            tempClientCon = servSocket.AcceptTcpClient();
-            Console.WriteLine("Got Client doing stuff now...");
-            bla.addWorker(new Worker(tempClientCon, new EchoTask()));
-            while (bla.getWorkerCount() > 0)
+            DBConnector db = new DBConnector(conf);
+
+            db.connectToDataBase(ref pw);
+            mec.listenForClient();
+            Console.WriteLine("MAIN:Got first Client\nStarting Echo Worker");
+            Worker w = new Worker(mec, new EchoTask(),db);
+            w.startWork();
+            while(mec.isWorking())
             {
-                System.Threading.Thread.Sleep(3000);
-                if (bla.getWorkerCount() == 2)
-                    wasTwo = true;
-                Console.WriteLine("Still working");
+                Thread.Sleep(5000);
+                Console.WriteLine("MAIN:Worker still working");
             }
         }
     }

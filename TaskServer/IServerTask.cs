@@ -9,7 +9,7 @@ namespace TaskServer
 {
     interface IServerTask
     {
-       void startTask(MessageCommunicator com);
+       void startTask(MessageCommunicator com,DBConnector dbConnection);
        void requestStop();
 
     }

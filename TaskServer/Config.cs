@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskServer
 {
-    class Config
+    public class Config
     {
         //private fields
         string _dbDatabaseName;
@@ -16,9 +16,6 @@ namespace TaskServer
         string _commandsPath;
         string _workingDirectory;
         char _seperator = ';';
-
-        
-  
         //end private fields
 
         //getter setter for private fields

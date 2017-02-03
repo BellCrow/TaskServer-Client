@@ -14,20 +14,23 @@ namespace TaskServer
     {
         static int IDPool = 0;
         MessageCommunicator _comLink;
+        DBConnector _dbCon;
         int _connectionID;
         Thread _workerThread;
         bool _isWorking;
         IServerTask _task;
-        public Worker(TcpClient connection,IServerTask task)
+        public Worker(MessageCommunicator connection, IServerTask task, DBConnector dbCon)
         {
-            _comLink = new MessageCommunicator(connection);
+            _comLink = connection;
             _connectionID = ++IDPool;
             _task = task;
+            _dbCon = dbCon;
             _isWorking = false;
         }
         public void startWork()
         {
-            _workerThread = new Thread(()=>_task.startTask(_comLink));
+            _workerThread = new Thread(()=>_task.startTask(_comLink,_dbCon));
+            _workerThread.Name = "Echo Workerthread";
             _workerThread.Start();
             _isWorking = true;
         }
